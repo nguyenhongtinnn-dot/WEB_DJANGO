@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-bookr-dev-only-change-before-deploy")
 
 # Tự động tắt DEBUG nếu chạy trên môi trường Render
-DEBUG = os.getenv("RENDER") is None
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
