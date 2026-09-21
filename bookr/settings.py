@@ -38,7 +38,7 @@ ROOT_URLCONF = "bookr.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.DjangoTemplates",
+        "BACKEND": "django.template.backends.djangoTemplates",
         "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
