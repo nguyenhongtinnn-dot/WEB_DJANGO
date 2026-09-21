@@ -12,13 +12,13 @@ DEBUG = False
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
-    "bookr.apps.BookrAdminConfig",
+   "bookr.apps.BookrAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "cloudinary_storage",
-    "django.contrib.staticfiles",
+    "django.contrib.staticfiles",  # Staticfiles phải nằm trên Cloudinary
+    "cloudinary_storage",          # Đã chuyển xuống dưới staticfiles
     "cloudinary",
     "reviews.apps.ReviewsConfig",
 ]
