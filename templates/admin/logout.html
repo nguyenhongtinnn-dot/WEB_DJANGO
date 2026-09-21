@@ -1,0 +1,5 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<p>Bạn đã đăng xuất khỏi Bookr Admin.</p>
+<p><a href="{% url 'admin:login' %}">Đăng nhập lại</a> · <a href="{% url 'reviews:book_list' %}">Về trang chủ</a></p>
+{% endblock %}

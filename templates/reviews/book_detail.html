@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ book.title }} — Bookr{% endblock %}
+{% block content %}
+<article class="detail">
+    <div class="cover-col">
+        {% if book.cover %}
+            <img src="{{ book.cover.url }}" alt="Bìa {{ book.title }}">
+        {% else %}
+            <div class="cover-fallback large">{{ book.title|make_list|first }}</div>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <a class="button secondary" href="{% url 'reviews:book_media' book.pk %}">Tải ảnh bìa / file mẫu</a>
+        {% endif %}
+    </div>
+    <div>
+        <h1>{{ book.title }}</h1>
+        <p class="muted">ISBN-13: {{ book.isbn }} · ISBN-10: {{ book.isbn10 }}</p>
+        <p>NXB: <a href="{% url 'reviews:publisher_edit' book.publisher.pk %}">{{ book.publisher.name }}</a></p>
+        <p>Ngày xuất bản: {{ book.publication_date }}</p>
+        <p>
+            Điểm trung bình:
+            {% if book.average_rating %}<strong>{{ book.average_rating }}/5</strong>{% else %}chưa có{% endif %}
+        </p>
+        <h2>Cộng tác viên</h2>
+        <ul>
+            {% for role in roles %}
+                <li>{{ role.contributor.full_name }} ({{ role.contributor.initials }}) — {{ role.get_role_display }}</li>
+            {% empty %}
+                <li>Chưa cập nhật</li>
+            {% endfor %}
+        </ul>
+        {% if book.sample %}
+            <p><a href="{{ book.sample.url }}">Tải bản mẫu</a></p>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <a class="button" href="{% url 'reviews:review_create' book.pk %}">Viết đánh giá</a>
+        {% else %}
+            <p><a href="{% url 'login' %}">Đăng nhập</a> để viết đánh giá.</p>
+        {% endif %}
+    </div>
+</article>
+
+<h2>Đánh giá</h2>
+{% for review in reviews %}
+    <section class="review">
+        <p><strong>{{ review.creator.username }}</strong> · {{ review.rating }}/5 · {{ review.date_created }}</p>
+        <p>{{ review.content }}</p>
+        {% if review.date_edited %}<p class="muted">Đã sửa: {{ review.date_edited }}</p>{% endif %}
+        {% if user == review.creator %}
+            <a href="{% url 'reviews:review_edit' book.pk review.pk %}">Sửa đánh giá</a>
+        {% endif %}
+    </section>
+{% empty %}
+    <p>Chưa có đánh giá cho cuốn này.</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{% if instance %}Sửa{% else %}Thêm{% endif %} nhà xuất bản — Bookr{% endblock %}
+{% block content %}
+<h1>{% if instance %}Sửa nhà xuất bản{% else %}Thêm nhà xuất bản{% endif %}</h1>
+<form method="post" class="stack">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button">Lưu</button>
+</form>
+{% endblock %}

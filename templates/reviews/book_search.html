@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Tìm sách — Bookr{% endblock %}
+{% block content %}
+<h1>Tìm sách</h1>
+<form method="get" class="stack">
+    {{ form.as_p }}
+    <button type="submit" class="button">Tìm</button>
+</form>
+{% if searched %}
+    <h2>Kết quả</h2>
+    <ul class="results">
+        {% for book in books %}
+            <li><a href="{% url 'reviews:book_detail' book.pk %}">{{ book.title }}</a> — {{ book.publisher.name }}</li>
+        {% empty %}
+            <li>Không tìm thấy sách phù hợp.</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,89 @@
+:root {
+    --ink: #14213d;
+    --accent: #c45c26;
+    --paper: #f7f1e5;
+    --card: #fffdf8;
+    --muted: #5c5c5c;
+}
+
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: var(--ink);
+    color: white;
+}
+.brand { color: white; font-weight: 700; font-size: 1.4rem; letter-spacing: 0.04em; }
+.topbar nav { display: flex; gap: 1rem; align-items: center; }
+.topbar nav a, .linkish { color: #f7f1e5; background: none; border: 0; cursor: pointer; font: inherit; }
+.inline { display: inline; margin: 0; }
+
+.container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; min-height: 70vh; }
+.hero {
+    background: linear-gradient(135deg, #14213d, #3d5a80);
+    color: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+}
+.hero h1 { margin-top: 0; }
+.button {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+}
+.button.secondary { background: var(--ink); }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1.2rem;
+}
+.card, .review {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 6px 18px rgba(20, 33, 61, 0.08);
+}
+.card img, .detail img { width: 100%; border-radius: 8px; }
+.cover-fallback {
+    height: 160px;
+    display: grid;
+    place-items: center;
+    background: #ead7c3;
+    font-size: 3rem;
+    border-radius: 8px;
+}
+.cover-fallback.large { height: 280px; }
+.muted { color: var(--muted); }
+.detail { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; }
+.stack p { margin: 0.6rem 0; }
+.input, input, select, textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d7c7b3;
+    border-radius: 6px;
+    font: inherit;
+}
+footer { text-align: center; padding: 2rem; color: var(--muted); }
+.messages { background: #dff0d8; padding: 0.8rem; border-radius: 8px; }
+
+@media (max-width: 720px) {
+    .detail { grid-template-columns: 1fr; }
+    .topbar { flex-direction: column; gap: 0.6rem; }
+}

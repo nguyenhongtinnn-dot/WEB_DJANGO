@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Bookr{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bookr.css' %}">
+</head>
+<body>
+<header class="topbar">
+    <a class="brand" href="{% url 'reviews:book_list' %}">Bookr</a>
+    <nav>
+        <a href="{% url 'reviews:book_list' %}">Sách</a>
+        <a href="{% url 'reviews:book_search' %}">Tìm kiếm</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'reviews:publisher_create' %}">Thêm NXB</a>
+            {% if user.is_staff %}
+                <a href="/admin/">Admin</a>
+            {% endif %}
+            <form class="inline" method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="linkish">Đăng xuất ({{ user.username }})</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Đăng nhập</a>
+        {% endif %}
+    </nav>
+</header>
+<main class="container">
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+</main>
+<footer>
+    Bookr — website đánh giá sách (Django, chương 1–10)
+</footer>
+</body>
+</html>

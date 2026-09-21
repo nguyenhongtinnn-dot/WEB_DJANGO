@@ -1,0 +1,33 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Kết quả tìm: "{{ query }}"</h1>
+{% if not query %}
+    <p>Nhập từ khóa để tìm sách, cộng tác viên, nhà xuất bản và đánh giá.</p>
+{% else %}
+    <h2>Sách ({{ books|length }})</h2>
+    <ul>
+        {% for book in books %}
+            <li><a href="{% url 'admin:reviews_book_change' book.pk %}">{{ book.title }}</a></li>
+        {% empty %}<li>Không có</li>{% endfor %}
+    </ul>
+    <h2>Cộng tác viên ({{ contributors|length }})</h2>
+    <ul>
+        {% for person in contributors %}
+            <li><a href="{% url 'admin:reviews_contributor_change' person.pk %}">{{ person }}</a></li>
+        {% empty %}<li>Không có</li>{% endfor %}
+    </ul>
+    <h2>Nhà xuất bản ({{ publishers|length }})</h2>
+    <ul>
+        {% for pub in publishers %}
+            <li><a href="{% url 'admin:reviews_publisher_change' pub.pk %}">{{ pub.name }}</a></li>
+        {% empty %}<li>Không có</li>{% endfor %}
+    </ul>
+    <h2>Đánh giá ({{ reviews|length }})</h2>
+    <ul>
+        {% for review in reviews %}
+            <li><a href="{% url 'admin:reviews_review_change' review.pk %}">{{ review }}</a></li>
+        {% empty %}<li>Không có</li>{% endfor %}
+    </ul>
+{% endif %}
+<p><a href="{% url 'admin:index' %}">Về dashboard admin</a></p>
+{% endblock %}

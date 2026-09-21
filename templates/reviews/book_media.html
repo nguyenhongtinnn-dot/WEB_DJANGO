@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Media — {{ book.title }}{% endblock %}
+{% block content %}
+<h1>Tải file cho {{ book.title }}</h1>
+<form method="post" enctype="multipart/form-data" class="stack">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button">Tải lên</button>
+    <a href="{% url 'reviews:book_detail' book.pk %}">Quay lại</a>
+</form>
+{% endblock %}

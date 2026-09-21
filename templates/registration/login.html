@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Đăng nhập — Bookr{% endblock %}
+{% block content %}
+<h1>Đăng nhập</h1>
+<form method="post" class="stack">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button">Đăng nhập</button>
+</form>
+<p class="muted">Tài khoản mẫu: <code>admin / admin123</code> hoặc <code>reader / reader123</code> (sau khi chạy seed_data).</p>
+{% endblock %}

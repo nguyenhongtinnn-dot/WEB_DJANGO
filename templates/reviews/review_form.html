@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{% if instance %}Sửa{% else %}Viết{% endif %} đánh giá — Bookr{% endblock %}
+{% block content %}
+<h1>{% if instance %}Sửa{% else %}Viết{% endif %} đánh giá cho {{ book.title }}</h1>
+<form method="post" class="stack">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button">Lưu</button>
+    <a href="{% url 'reviews:book_detail' book.pk %}">Hủy</a>
+</form>
+{% endblock %}
