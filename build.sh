@@ -4,7 +4,8 @@ set -o errexit
 
 pip install -r requirements.txt
 
-# Bổ sung cờ --clear để làm sạch cache tĩnh cũ
+# Xóa thư mục gom cũ nếu có và gom mới hoàn toàn
+rm -rf staticfiles
 python manage.py collectstatic --noinput --clear
 python manage.py migrate
 
