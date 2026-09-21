@@ -60,12 +60,11 @@ class Book(models.Model):
     
     # --- ĐÃ ĐỔI TỪ CharField SANG CloudinaryField LỜI GIẢI CHO VIDEO ---
     sample_video_url = CloudinaryField(
-        'video',
-        resource_type='video',
-        folder='book_videos/',
+        verbose_name="Video giới thiệu",
+        resource_type="video",
+        folder="book_videos/",
         blank=True,
         null=True,
-        verbose_name="Video giới thiệu"
     )
 
     class Meta:
