@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from cloudinary.models import CloudinaryField  # Import CloudinaryField
 
 
 class Publisher(models.Model):
@@ -55,10 +56,16 @@ class Book(models.Model):
         upload_to="book_samples/", blank=True, verbose_name="Bản mẫu"
     )
 
-    # --- 2 TRƯỜNG ĐÃ ĐƯỢC CHÈN VÀO TRONG CLASS BOOK ---
     content = models.TextField(blank=True, null=True, verbose_name="Nội dung chi tiết")
-    sample_video_url = models.CharField(
-        max_length=255, blank=True, null=True, verbose_name="Đường dẫn/Tên file Video"
+    
+    # --- ĐÃ ĐỔI TỪ CharField SANG CloudinaryField LỜI GIẢI CHO VIDEO ---
+    sample_video_url = CloudinaryField(
+        'video',
+        resource_type='video',
+        folder='book_videos/',
+        blank=True,
+        null=True,
+        verbose_name="Video giới thiệu"
     )
 
     class Meta:

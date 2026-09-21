@@ -68,11 +68,10 @@
             </div>
         {% else %}
             <!-- Trình phát Video HTML5 chuẩn đọc tệp trong media/ -->
-            <video controls style="width: 100%; max-height: 450px; border-radius: 8px; background-color: #000;" preload="metadata">
-                <source src="/media/{{ book.sample_video_url }}" type="video/mp4">
-                <source src="{% get_media_prefix %}{{ book.sample_video_url }}" type="video/mp4">
-                Trình duyệt của bạn không hỗ trợ phát video MP4.
-            </video>
+            <video controls style="width: 100%; max-width: 700px; height: auto; border-radius: 8px;">
+    <source src="{{ book.sample_video_url.url }}" type="video/mp4">
+    Trình duyệt của bạn không hỗ trợ thẻ video.
+  </video>
         {% endif %}
     </div>
 </section>
