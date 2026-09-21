@@ -98,7 +98,7 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.StaticFilesStorage",  # Sử dụng StaticFilesStorage cơ bản thay vì CompressedStaticFilesStorage
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
     },
 }
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
