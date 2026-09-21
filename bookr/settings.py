@@ -76,8 +76,13 @@ USE_TZ = True
 
 # Static Files Configuration
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Ép đường dẫn tĩnh nhận diện cả dạng Path và String chuẩn
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
 
