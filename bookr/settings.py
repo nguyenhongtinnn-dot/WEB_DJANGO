@@ -6,10 +6,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-bookr-dev-only-change-before-deploy")
 
-# Tự động chuyển DEBUG về False trên Render (môi trường production)
+# Tự động tắt DEBUG nếu chạy trên môi trường Render
 DEBUG = os.getenv("RENDER") is None
 
-# Cho phép tất cả các tên miền từ Render và Local
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
@@ -56,7 +55,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "bookr.wsgi.application"
 
-# Database: Dùng Postgres khi có DATABASE_URL (Render), ngược lại dùng SQLite local
 DATABASES = {
     "default": dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
@@ -81,18 +79,21 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# Cấu hình dự phòng cho WhiteNoise (cho các bản Django cũ hơn 4.2)
+STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
+
 # Media Files Configuration
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Cấu hình Cloudinary Storage
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'xikkw70a', # Cloud Name của bạn
-    'API_KEY': '621131795922753', # Thay bằng API Key lấy trên Cloudinary[cite: 13]
-    'API_SECRET': '-PisDl_W4cY6wqbKiOoEGS1NYsA', # Thay bằng API Secret lấy trên Cloudinary[cite: 13]
+    'CLOUD_NAME': 'xikkw70a',
+    'API_KEY': '621131795922753',
+    'API_SECRET': '-PisDl_W4cY6wqbKiOoEGS1NYsA',
 }
 
-# Sử dụng Cloudinary làm bộ lưu trữ tệp Media mặc định
+# Cấu hình bộ lưu trữ STORAGES chuẩn cho Django 4.2+
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
