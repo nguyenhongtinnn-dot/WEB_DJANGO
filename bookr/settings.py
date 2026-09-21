@@ -6,8 +6,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-bookr-dev-only-change-before-deploy")
 
-# Tự động tắt DEBUG nếu chạy trên Render
-DEBUG = True
+# Tự động chuyển DEBUG về False trên Render (môi trường production)
+DEBUG = os.getenv("RENDER") is None
 
 # Cho phép tất cả các tên miền từ Render và Local
 ALLOWED_HOSTS = ["*"]
@@ -18,14 +18,15 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "cloudinary_storage",
     "django.contrib.staticfiles",
+    "cloudinary",
     "reviews.apps.ReviewsConfig",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # Phục vụ static files trên production
-    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -37,7 +38,7 @@ ROOT_URLCONF = "bookr.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "BACKEND": "django.template.backends.DjangoTemplates",
         "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -83,17 +84,22 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# WhiteNoise Storage (Tránh lỗi MissingFileError)
+# Cấu hình Cloudinary Storage
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'xikkw70a', # Cloud Name của bạn
+    'API_KEY': '621131795922753', # Thay bằng API Key lấy trên Cloudinary[cite: 13]
+    'API_SECRET': '-PisDl_W4cY6wqbKiOoEGS1NYsA', # Thay bằng API Secret lấy trên Cloudinary[cite: 13]
+}
+
+# Sử dụng Cloudinary làm bộ lưu trữ tệp Media mặc định
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.StaticFilesStorage",
     },
 }
-
-
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
