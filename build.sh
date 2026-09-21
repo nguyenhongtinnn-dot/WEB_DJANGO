@@ -4,7 +4,8 @@ set -o errexit
 
 pip install -r requirements.txt
 
-python manage.py collectstatic --no-input
+# Đã sửa --no-input thành --noinput
+python manage.py collectstatic --noinput
 python manage.py migrate
 
 # Tự động nạp dữ liệu sách mẫu
