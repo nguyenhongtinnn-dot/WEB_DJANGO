@@ -55,6 +55,12 @@ class Book(models.Model):
         upload_to="book_samples/", blank=True, verbose_name="Bản mẫu"
     )
 
+    # --- 2 TRƯỜNG ĐÃ ĐƯỢC CHÈN VÀO TRONG CLASS BOOK ---
+    content = models.TextField(blank=True, null=True, verbose_name="Nội dung chi tiết")
+    sample_video_url = models.CharField(
+        max_length=255, blank=True, null=True, verbose_name="Đường dẫn/Tên file Video"
+    )
+
     class Meta:
         verbose_name = "Sách"
         verbose_name_plural = "Sách"
