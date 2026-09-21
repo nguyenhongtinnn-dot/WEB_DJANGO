@@ -79,8 +79,7 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Cấu hình dự phòng cho WhiteNoise (cho các bản Django cũ hơn 4.2)
-STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
+
 
 # Media Files Configuration
 MEDIA_URL = "/media/"
