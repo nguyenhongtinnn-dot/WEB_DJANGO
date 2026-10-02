@@ -1,118 +1,208 @@
-from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
 from datetime import date
+
+from django.contrib.auth.models import User
+from django.core.management.base import BaseCommand
 
 from reviews.models import Book, BookContributor, Contributor, Publisher, Review
 
 
 class Command(BaseCommand):
-    help = "Tạo dữ liệu mẫu Bookr (chương 1-10)"
+    help = "Tạo dữ liệu mẫu cho website phim"
 
     def handle(self, *args, **options):
         if not User.objects.filter(username="admin").exists():
-            User.objects.create_superuser("admin", "admin@bookr.local", "admin123")
+            User.objects.create_superuser("admin", "admin@cinenoir.local", "admin123")
             self.stdout.write(self.style.SUCCESS("Đã tạo superuser admin / admin123"))
 
-        reader, _ = User.objects.get_or_create(
+        viewer, _ = User.objects.get_or_create(
             username="reader",
-            defaults={"email": "reader@bookr.local"},
+            defaults={"email": "viewer@cinenoir.local"},
         )
-        if not reader.has_usable_password():
-            reader.set_password("reader123")
-            reader.save()
+        viewer.set_password("reader123")
+        viewer.save()
 
-        publishers = {
-            "NXB Trẻ": Publisher.objects.get_or_create(
-                name="NXB Trẻ",
-                defaults={"website": "https://nxbtre.com.vn", "email": "info@nxbtre.com.vn"},
+        studios = {
+            "warner": Publisher.objects.get_or_create(
+                name="Warner Bros.",
+                defaults={"website": "https://www.warnerbros.com", "email": "contact@warnerbros.com"},
             )[0],
-            "Packt": Publisher.objects.get_or_create(
-                name="Packt Publishing",
-                defaults={"website": "https://www.packtpub.com", "email": "info@packtpub.com"},
+            "netflix": Publisher.objects.get_or_create(
+                name="Netflix",
+                defaults={"website": "https://www.netflix.com", "email": "press@netflix.com"},
             )[0],
-            "OReilly": Publisher.objects.get_or_create(
-                name="O'Reilly Media",
-                defaults={"website": "https://www.oreilly.com", "email": "info@oreilly.com"},
+            "bhd": Publisher.objects.get_or_create(
+                name="BHD / Galaxy Studio",
+                defaults={"website": "https://www.bhdstar.vn", "email": "info@bhdstar.vn"},
+            )[0],
+            "bbc": Publisher.objects.get_or_create(
+                name="BBC Audio",
+                defaults={"website": "https://www.bbc.co.uk", "email": "audio@bbc.co.uk"},
             )[0],
         }
 
-        contributors = {
-            "dung": Contributor.objects.get_or_create(
-                email="tuan.dung@example.com",
-                defaults={"first_names": "Tuấn Dũng", "last_names": "Trần"},
+        people = {
+            "villeneuve": Contributor.objects.get_or_create(
+                email="denis@example.com",
+                defaults={"first_names": "Denis", "last_names": "Villeneuve"},
             )[0],
-            "shaw": Contributor.objects.get_or_create(
-                email="ben.shaw@example.com",
-                defaults={"first_names": "Ben", "last_names": "Shaw"},
+            "bong": Contributor.objects.get_or_create(
+                email="bong@example.com",
+                defaults={"first_names": "Joon-ho", "last_names": "Bong"},
             )[0],
-            "badhwar": Contributor.objects.get_or_create(
-                email="saurabh.badhwar@example.com",
-                defaults={"first_names": "Saurabh", "last_names": "Badhwar"},
+            "vu": Contributor.objects.get_or_create(
+                email="tranthanhtam@example.com",
+                defaults={"first_names": "Thành", "last_names": "Trấn"},
             )[0],
-            "holovaty": Contributor.objects.get_or_create(
-                email="adrian@example.com",
-                defaults={"first_names": "Adrian", "last_names": "Holovaty"},
+            "duffer": Contributor.objects.get_or_create(
+                email="duffer@example.com",
+                defaults={"first_names": "Matt", "last_names": "Duffer"},
+            )[0],
+            "hwang": Contributor.objects.get_or_create(
+                email="hwang@example.com",
+                defaults={"first_names": "Dong-hyuk", "last_names": "Hwang"},
+            )[0],
+            "orwell": Contributor.objects.get_or_create(
+                email="orwell@example.com",
+                defaults={"first_names": "George", "last_names": "Orwell"},
+            )[0],
+            "wells": Contributor.objects.get_or_create(
+                email="wells@example.com",
+                defaults={"first_names": "H. G.", "last_names": "Wells"},
+            )[0],
+            "nguyen": Contributor.objects.get_or_create(
+                email="nguyentu@example.com",
+                defaults={"first_names": "Tú", "last_names": "Nguyễn"},
             )[0],
         }
 
-        books_data = [
+        films = [
             {
-                "title": "Python & Django thực chiến",
-                "isbn": "9786044797915",
+                "title": "Dune: Part Two",
+                "isbn": "MOV-DUNE-2024",
+                "kind": Book.Kind.MOVIE,
                 "publication_date": date(2024, 3, 1),
-                "publisher": publishers["NXB Trẻ"],
-                "authors": [contributors["dung"]],
+                "publisher": studios["warner"],
+                "duration_minutes": 166,
+                "content": "Paul Atreides liên minh với người Fremen để trả thù và định đoạt số phận Arrakis.",
+                "sample_video_url": "https://www.youtube.com/watch?v=Way9Dexny3w",
+                "crew": [(people["villeneuve"], BookContributor.ContributionRole.DIRECTOR)],
             },
             {
-                "title": "Web Development with Django",
-                "isbn": "9781803230603",
-                "publication_date": date(2023, 5, 26),
-                "publisher": publishers["Packt"],
-                "authors": [contributors["shaw"], contributors["badhwar"]],
+                "title": "Parasite",
+                "isbn": "MOV-PARA-2019",
+                "kind": Book.Kind.MOVIE,
+                "publication_date": date(2019, 5, 30),
+                "publisher": studios["bhd"],
+                "duration_minutes": 132,
+                "content": "Hai gia đình đối lập giai cấp va chạm trong một ngôi nhà sang trọng ở Seoul.",
+                "sample_video_url": "https://www.youtube.com/watch?v=5xH0HfJHsaY",
+                "crew": [(people["bong"], BookContributor.ContributionRole.DIRECTOR)],
             },
             {
-                "title": "The Definitive Guide to Django",
-                "isbn": "9781590597255",
-                "publication_date": date(2009, 7, 1),
-                "publisher": publishers["OReilly"],
-                "authors": [contributors["holovaty"]],
+                "title": "Bố Già",
+                "isbn": "MOV-BOGIA-2021",
+                "kind": Book.Kind.MOVIE,
+                "publication_date": date(2021, 3, 12),
+                "publisher": studios["bhd"],
+                "duration_minutes": 128,
+                "content": "Câu chuyện gia đình Sài Gòn: tình cha con, mưu sinh và những lựa chọn khó khăn.",
+                "crew": [(people["vu"], BookContributor.ContributionRole.DIRECTOR)],
             },
             {
-                "title": "Two Scoops of Django",
-                "isbn": "9780981467306",
-                "publication_date": date(2022, 1, 15),
-                "publisher": publishers["Packt"],
-                "authors": [contributors["shaw"]],
+                "title": "Stranger Things",
+                "isbn": "SER-ST-2016",
+                "kind": Book.Kind.SERIES,
+                "publication_date": date(2016, 7, 15),
+                "publisher": studios["netflix"],
+                "episode_count": 34,
+                "duration_minutes": 50,
+                "content": "Nhóm bạn ở Hawkins đối mặt thế giới Upside Down và những bí ẩn siêu nhiên.",
+                "sample_video_url": "https://www.youtube.com/watch?v=b9EkMcQRlbI",
+                "crew": [(people["duffer"], BookContributor.ContributionRole.DIRECTOR)],
+            },
+            {
+                "title": "Squid Game",
+                "isbn": "SER-SG-2021",
+                "kind": Book.Kind.SERIES,
+                "publication_date": date(2021, 9, 17),
+                "publisher": studios["netflix"],
+                "episode_count": 9,
+                "duration_minutes": 55,
+                "content": "Người chơi phá sản tham gia trò chơi sinh tử để tranh giải thưởng khổng lồ.",
+                "sample_video_url": "https://www.youtube.com/watch?v=oqxAJKy0ii4",
+                "crew": [(people["hwang"], BookContributor.ContributionRole.WRITER)],
+            },
+            {
+                "title": "The Bear",
+                "isbn": "SER-BEAR-2022",
+                "kind": Book.Kind.SERIES,
+                "publication_date": date(2022, 6, 23),
+                "publisher": studios["netflix"],
+                "episode_count": 28,
+                "duration_minutes": 30,
+                "content": "Một đầu bếp fine-dining về điều hành tiệm sandwich của gia đình tại Chicago.",
+                "crew": [(people["duffer"], BookContributor.ContributionRole.DIRECTOR)],
+            },
+            {
+                "title": "The War of the Worlds (Audio)",
+                "isbn": "AUD-WOW-1938",
+                "kind": Book.Kind.AUDIO,
+                "publication_date": date(1938, 10, 30),
+                "publisher": studios["bbc"],
+                "episode_count": 1,
+                "duration_minutes": 60,
+                "content": "Audio drama kinh điển về cuộc đổ bộ của sao Hỏa, kể bằng giọng tường thuật.",
+                "crew": [(people["wells"], BookContributor.ContributionRole.AUTHOR)],
+            },
+            {
+                "title": "1984 — Audio Drama",
+                "isbn": "AUD-1984-2020",
+                "kind": Book.Kind.AUDIO,
+                "publication_date": date(2020, 4, 4),
+                "publisher": studios["bbc"],
+                "episode_count": 8,
+                "duration_minutes": 45,
+                "content": "Chuyển thể audio của 1984: Winston Smith sống dưới sự giám sát của Big Brother.",
+                "crew": [(people["orwell"], BookContributor.ContributionRole.AUTHOR)],
+            },
+            {
+                "title": "Đêm Sài Gòn — Audio",
+                "isbn": "AUD-SG-2023",
+                "kind": Book.Kind.AUDIO,
+                "publication_date": date(2023, 8, 20),
+                "publisher": studios["bhd"],
+                "episode_count": 12,
+                "duration_minutes": 25,
+                "content": "Phim audio nhiều tập về những mảnh đời về đêm ở Sài Gòn.",
+                "crew": [(people["nguyen"], BookContributor.ContributionRole.WRITER)],
             },
         ]
 
-        for item in books_data:
-            book, created = Book.objects.get_or_create(
+        for item in films:
+            book, _created = Book.objects.update_or_create(
                 isbn=item["isbn"],
                 defaults={
                     "title": item["title"],
+                    "kind": item["kind"],
                     "publication_date": item["publication_date"],
                     "publisher": item["publisher"],
+                    "duration_minutes": item.get("duration_minutes"),
+                    "episode_count": item.get("episode_count"),
+                    "content": item.get("content", ""),
+                    "sample_video_url": item.get("sample_video_url") or "",
                 },
             )
-            for index, author in enumerate(item["authors"]):
-                role = (
-                    BookContributor.ContributionRole.AUTHOR
-                    if index == 0
-                    else BookContributor.ContributionRole.CO_AUTHOR
-                )
+            for person, role in item["crew"]:
                 BookContributor.objects.get_or_create(
-                    book=book, contributor=author, defaults={"role": role}
+                    book=book, contributor=person, role=role
                 )
+            Review.objects.get_or_create(
+                book=book,
+                creator=viewer,
+                defaults={
+                    "content": f"{book.title} đáng xem trên CineNoir — {book.get_kind_display()}.",
+                    "rating": 5,
+                },
+            )
 
-            if created or not book.review_set.exists():
-                Review.objects.get_or_create(
-                    book=book,
-                    creator=reader,
-                    defaults={
-                        "content": f"Cuốn {book.title} rất hữu ích để học Django đến chương 10.",
-                        "rating": 5,
-                    },
-                )
-
-        self.stdout.write(self.style.SUCCESS("Đã nạp dữ liệu mẫu."))
+        self.stdout.write(self.style.SUCCESS("Seeded film sample data."))

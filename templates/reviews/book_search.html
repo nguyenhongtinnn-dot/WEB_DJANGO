@@ -1,19 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Tìm sách — Bookr{% endblock %}
+{% block title %}Tìm phim — CineNoir{% endblock %}
 {% block content %}
-<h1>Tìm sách</h1>
-<form method="get" class="stack">
+<section class="page-head">
+    <h1>Tìm phim</h1>
+    <p class="muted">Lọc theo tên, ekip hoặc loại phim.</p>
+</section>
+<form method="get" class="form-card">
     {{ form.as_p }}
-    <button type="submit" class="button">Tìm</button>
+    <div class="form-actions">
+        <button type="submit" class="button">Tìm kiếm</button>
+    </div>
 </form>
 {% if searched %}
     <h2>Kết quả</h2>
-    <ul class="results">
-        {% for book in books %}
-            <li><a href="{% url 'reviews:book_detail' book.pk %}">{{ book.title }}</a> — {{ book.publisher.name }}</li>
+    <div class="grid">
+        {% for film in books %}
+            {% include "reviews/_film_card.html" %}
         {% empty %}
-            <li>Không tìm thấy sách phù hợp.</li>
+            <p class="muted">Không tìm thấy phim phù hợp.</p>
         {% endfor %}
-    </ul>
+    </div>
 {% endif %}
 {% endblock %}

@@ -28,9 +28,17 @@ class ContributorAdmin(admin.ModelAdmin):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
-    list_display = ("title", "isbn", "publication_date", "publisher")
-    list_filter = ("publisher", "publication_date")
-    search_fields = ("title", "isbn")
+    list_display = (
+        "title",
+        "kind",
+        "isbn",
+        "publication_date",
+        "publisher",
+        "episode_count",
+        "duration_minutes",
+    )
+    list_filter = ("kind", "publisher", "publication_date")
+    search_fields = ("title", "isbn", "content")
     date_hierarchy = "publication_date"
     inlines = [BookContributorInline, ReviewInline]
 

@@ -4,9 +4,9 @@ from django.urls import path
 
 
 class BookrAdminSite(admin.AdminSite):
-    site_header = "Bookr administration"
-    site_title = "Bookr Admin"
-    index_title = "Bookr site admin"
+    site_header = "CineNoir administration"
+    site_title = "CineNoir Admin"
+    index_title = "Quản trị thư viện phim"
     logout_template = "admin/logout.html"
     index_template = "admin/bookr_index.html"
 

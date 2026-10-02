@@ -1,0 +1,26 @@
+<article class="card">
+    <a class="card-media" href="{% url 'reviews:book_detail' film.pk %}">
+        {% if film.cover %}
+            <img src="{{ film.cover.url }}" alt="Poster {{ film.title }}">
+        {% else %}
+            <div class="cover-fallback">{{ film.title|make_list|first }}</div>
+        {% endif %}
+        <span class="badge badge-{{ film.kind }}">{{ film.get_kind_display }}</span>
+    </a>
+    <div class="card-body">
+        <h3><a href="{% url 'reviews:book_detail' film.pk %}">{{ film.title }}</a></h3>
+        <p class="muted">{{ film.publisher.name }} · {{ film.publication_date|date:"Y" }}</p>
+        <p class="meta-line">
+            {% if film.average_rating %}
+                <span class="rating">★ {{ film.average_rating }}</span>
+            {% else %}
+                <span class="muted">Chưa có điểm</span>
+            {% endif %}
+            {% if film.is_series and film.episode_count %}
+                <span class="dot">·</span> {{ film.episode_count }} tập
+            {% elif film.duration_minutes %}
+                <span class="dot">·</span> {{ film.duration_minutes }} phút
+            {% endif %}
+        </p>
+    </div>
+</article>

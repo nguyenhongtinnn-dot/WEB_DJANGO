@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}CineNoir — thư viện phim{% endblock %}
+{% block content %}
+<section class="hero">
+    <p class="eyebrow">Thư viện phim đêm</p>
+    <h1>Movie, series và audio — một chỗ để khám phá.</h1>
+    <p>Xem poster, trailer, nghe audio drama và viết đánh giá sau khi đăng nhập.</p>
+    <div class="hero-actions">
+        <a class="button" href="{% url 'reviews:movies' %}">Phim movie</a>
+        <a class="button ghost" href="{% url 'reviews:series' %}">Phim series</a>
+        <a class="button ghost" href="{% url 'reviews:audio' %}">Phim audio</a>
+    </div>
+</section>
+
+<section class="shelf">
+    <div class="shelf-head">
+        <h2>Phim movie</h2>
+        <a href="{% url 'reviews:movies' %}">Xem tất cả</a>
+    </div>
+    <div class="grid">
+        {% for film in movies %}
+            {% include "reviews/_film_card.html" %}
+        {% empty %}
+            <p class="muted">Chưa có phim movie. Chạy <code>python manage.py seed_data</code>.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="shelf">
+    <div class="shelf-head">
+        <h2>Phim series</h2>
+        <a href="{% url 'reviews:series' %}">Xem tất cả</a>
+    </div>
+    <div class="grid">
+        {% for film in series %}
+            {% include "reviews/_film_card.html" %}
+        {% empty %}
+            <p class="muted">Chưa có phim series.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="shelf">
+    <div class="shelf-head">
+        <h2>Phim audio</h2>
+        <a href="{% url 'reviews:audio' %}">Xem tất cả</a>
+    </div>
+    <div class="grid">
+        {% for film in audios %}
+            {% include "reviews/_film_card.html" %}
+        {% empty %}
+            <p class="muted">Chưa có phim audio.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

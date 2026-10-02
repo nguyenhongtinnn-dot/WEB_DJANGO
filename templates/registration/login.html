@@ -1,11 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Đăng nhập — Bookr{% endblock %}
+{% block title %}Đăng nhập — CineNoir{% endblock %}
 {% block content %}
-<h1>Đăng nhập</h1>
-<form method="post" class="stack">
+<section class="page-head">
+    <h1>Đăng nhập</h1>
+    <p class="muted">Vào tài khoản để viết đánh giá và tải media.</p>
+</section>
+<form method="post" class="form-card">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="button">Đăng nhập</button>
+    <div class="form-actions">
+        <button type="submit" class="button">Đăng nhập</button>
+    </div>
 </form>
-<p class="muted">Tài khoản mẫu: <code>admin / admin123</code> hoặc <code>reader / reader123</code> (sau khi chạy seed_data).</p>
+<p class="muted hint">Tài khoản mẫu: <code>admin / admin123</code> hoặc <code>reader / reader123</code> (sau khi chạy seed_data).</p>
 {% endblock %}

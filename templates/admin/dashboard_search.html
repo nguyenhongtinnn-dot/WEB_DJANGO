@@ -2,21 +2,21 @@
 {% block content %}
 <h1>Kết quả tìm: "{{ query }}"</h1>
 {% if not query %}
-    <p>Nhập từ khóa để tìm sách, cộng tác viên, nhà xuất bản và đánh giá.</p>
+    <p>Nhập từ khóa để tìm phim, ekip, hãng phim và đánh giá.</p>
 {% else %}
-    <h2>Sách ({{ books|length }})</h2>
+    <h2>Phim ({{ books|length }})</h2>
     <ul>
         {% for book in books %}
-            <li><a href="{% url 'admin:reviews_book_change' book.pk %}">{{ book.title }}</a></li>
+            <li><a href="{% url 'admin:reviews_book_change' book.pk %}">{{ book.title }}</a> — {{ book.get_kind_display }}</li>
         {% empty %}<li>Không có</li>{% endfor %}
     </ul>
-    <h2>Cộng tác viên ({{ contributors|length }})</h2>
+    <h2>Ekip ({{ contributors|length }})</h2>
     <ul>
         {% for person in contributors %}
             <li><a href="{% url 'admin:reviews_contributor_change' person.pk %}">{{ person }}</a></li>
         {% empty %}<li>Không có</li>{% endfor %}
     </ul>
-    <h2>Nhà xuất bản ({{ publishers|length }})</h2>
+    <h2>Hãng phim ({{ publishers|length }})</h2>
     <ul>
         {% for pub in publishers %}
             <li><a href="{% url 'admin:reviews_publisher_change' pub.pk %}">{{ pub.name }}</a></li>

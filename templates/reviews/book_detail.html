@@ -1,39 +1,42 @@
 {% extends "base.html" %}
-{% load static %}
-
-{% block title %}{{ book.title }} — Bookr{% endblock %}
+{% block title %}{{ book.title }} — CineNoir{% endblock %}
 {% block content %}
 <article class="detail">
     <div class="cover-col">
         {% if book.cover %}
-            <img src="{{ book.cover.url }}" alt="Bìa {{ book.title }}">
+            <img src="{{ book.cover.url }}" alt="Poster {{ book.title }}">
         {% else %}
             <div class="cover-fallback large">{{ book.title|make_list|first }}</div>
         {% endif %}
+        <span class="badge badge-{{ book.kind }}">{{ book.get_kind_display }}</span>
         {% if user.is_authenticated %}
-            <a class="button secondary" href="{% url 'reviews:book_media' book.pk %}">Tải ảnh bìa / file mẫu</a>
+            <a class="button secondary" href="{% url 'reviews:book_media' book.pk %}">Cập nhật poster / media</a>
         {% endif %}
     </div>
     <div>
+        <p class="eyebrow">{{ book.publisher.name }} · {{ book.publication_date|date:"Y" }}</p>
         <h1>{{ book.title }}</h1>
-        <p class="muted">ISBN-13: {{ book.isbn }} · ISBN-10: {{ book.isbn10 }}</p>
-        <p>NXB: <a href="{% url 'reviews:publisher_edit' book.publisher.pk %}">{{ book.publisher.name }}</a></p>
-        <p>Ngày xuất bản: {{ book.publication_date }}</p>
+        <p class="muted">Mã phim: {{ book.isbn }}</p>
         <p>
-            Điểm trung bình:
-            {% if book.average_rating %}<strong>{{ book.average_rating }}/5</strong>{% else %}chưa có{% endif %}
+            {% if book.average_rating %}
+                <span class="rating">★ {{ book.average_rating }}/5</span>
+            {% else %}
+                Chưa có điểm trung bình
+            {% endif %}
         </p>
-        <h2>Cộng tác viên</h2>
+        <ul class="facts">
+            {% if book.duration_minutes %}<li>Thời lượng: {{ book.duration_minutes }} phút</li>{% endif %}
+            {% if book.episode_count %}<li>Số tập: {{ book.episode_count }}</li>{% endif %}
+            <li>Hãng: <a href="{% url 'reviews:publisher_edit' book.publisher.pk %}">{{ book.publisher.name }}</a></li>
+        </ul>
+        <h2>Ekip</h2>
         <ul>
             {% for role in roles %}
-                <li>{{ role.contributor.full_name }} ({{ role.contributor.initials }}) — {{ role.get_role_display }}</li>
+                <li>{{ role.contributor.full_name }} — {{ role.get_role_display }}</li>
             {% empty %}
                 <li>Chưa cập nhật</li>
             {% endfor %}
         </ul>
-        {% if book.sample %}
-            <p><a href="{{ book.sample.url }}">Tải bản mẫu</a></p>
-        {% endif %}
         {% if user.is_authenticated %}
             <a class="button" href="{% url 'reviews:review_create' book.pk %}">Viết đánh giá</a>
         {% else %}
@@ -42,45 +45,40 @@
     </div>
 </article>
 
-<!-- KHỐI HIỂN THỊ NỘI DUNG SÁCH -->
 {% if book.content %}
-<section class="book-content" style="margin: 25px 0;">
-    <h2>Nội dung chi tiết</h2>
-    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; line-height: 1.6; border: 1px solid #e9ecef;">
-        {{ book.content|linebreaks }}
-    </div>
+<section class="panel">
+    <h2>Nội dung</h2>
+    <div class="prose">{{ book.content|linebreaks }}</div>
 </section>
 {% endif %}
 
-<!-- KHỐI HIỂN THỊ VIDEO XEM THỬ -->
-{% if book.sample_video_url %}
-<section class="book-video" style="margin: 25px 0;">
-    <h2>Video giới thiệu / Xem thử</h2>
-    <div style="margin-top: 10px;">
-        {% if "youtube" in book.sample_video_url or "youtu.be" in book.sample_video_url %}
-            <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px;">
-                <iframe src="{{ book.sample_video_url }}" 
-                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen>
-                </iframe>
-            </div>
-        {% else %}
-            <!-- Trình phát Video HTML5 chuẩn đọc tệp trong media/ -->
-            <video controls style="width: 100%; max-width: 700px; height: auto; border-radius: 8px;">
-    <source src="{{ book.sample_video_url.url }}" type="video/mp4">
-    Trình duyệt của bạn không hỗ trợ thẻ video.
-  </video>
-        {% endif %}
+{% if book.youtube_embed_url %}
+<section class="panel">
+    <h2>Trailer</h2>
+    <div class="video-frame">
+        <iframe src="{{ book.youtube_embed_url }}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
     </div>
+</section>
+{% elif book.trailer_src %}
+<section class="panel">
+    <h2>Video</h2>
+    <video controls>
+        <source src="{{ book.trailer_src }}" type="video/mp4">
+    </video>
+</section>
+{% endif %}
+
+{% if book.sample %}
+<section class="panel">
+    <h2>{% if book.is_audio %}Nghe phim audio{% else %}File mẫu{% endif %}</h2>
+    <audio controls src="{{ book.sample.url }}"></audio>
 </section>
 {% endif %}
 
 <h2>Đánh giá</h2>
 {% for review in reviews %}
     <section class="review">
-        <p><strong>{{ review.creator.username }}</strong> · {{ review.rating }}/5 · {{ review.date_created }}</p>
+        <p><strong>{{ review.creator.username }}</strong> · ★ {{ review.rating }}/5 · {{ review.date_created }}</p>
         <p>{{ review.content }}</p>
         {% if review.date_edited %}<p class="muted">Đã sửa: {{ review.date_edited }}</p>{% endif %}
         {% if user == review.creator %}
@@ -88,6 +86,6 @@
         {% endif %}
     </section>
 {% empty %}
-    <p>Chưa có đánh giá cho cuốn này.</p>
+    <p class="muted">Chưa có đánh giá cho phim này.</p>
 {% endfor %}
 {% endblock %}

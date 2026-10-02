@@ -6,17 +6,62 @@ from django.db.models import Q
 from .forms import BookMediaForm, PublisherForm, ReviewForm, SearchForm
 from .models import Book, BookContributor, Contributor, Publisher, Review
 
+KIND_META = {
+    Book.Kind.MOVIE: {
+        "title": "Phim movie",
+        "subtitle": "Phim điện ảnh chiếu rạp và phim lẻ.",
+    },
+    Book.Kind.SERIES: {
+        "title": "Phim series",
+        "subtitle": "Phim nhiều tập — theo dõi từng mùa, từng tập.",
+    },
+    Book.Kind.AUDIO: {
+        "title": "Phim audio",
+        "subtitle": "Phim âm thanh, audio drama và truyện kể bằng lời.",
+    },
+}
+
+
+def _film_queryset():
+    return Book.objects.select_related("publisher").prefetch_related("contributors")
+
+
+def home(request):
+    films = _film_queryset()
+    return render(
+        request,
+        "reviews/home.html",
+        {
+            "movies": films.filter(kind=Book.Kind.MOVIE)[:8],
+            "series": films.filter(kind=Book.Kind.SERIES)[:8],
+            "audios": films.filter(kind=Book.Kind.AUDIO)[:8],
+        },
+    )
+
+
+def film_list(request, kind):
+    meta = KIND_META.get(kind)
+    if not meta:
+        return redirect("reviews:book_list")
+    films = _film_queryset().filter(kind=kind)
+    return render(
+        request,
+        "reviews/book_list.html",
+        {
+            "books": films,
+            "kind": kind,
+            "page_title": meta["title"],
+            "page_subtitle": meta["subtitle"],
+        },
+    )
+
 
 def book_list(request):
-    books = Book.objects.select_related("publisher").prefetch_related("contributors")
-    return render(request, "reviews/book_list.html", {"books": books})
+    return home(request)
 
 
 def book_detail(request, pk):
-    book = get_object_or_404(
-        Book.objects.select_related("publisher").prefetch_related("contributors"),
-        pk=pk,
-    )
+    book = get_object_or_404(_film_queryset(), pk=pk)
     reviews = book.review_set.select_related("creator")
     roles = BookContributor.objects.filter(book=book).select_related("contributor")
     return render(
@@ -32,8 +77,9 @@ def book_search(request):
     searched = False
 
     if form.is_valid():
-        search = form.cleaned_data.get("search")
+        search = (form.cleaned_data.get("search") or "").strip()
         search_in = form.cleaned_data.get("search_in") or "title"
+        kind = form.cleaned_data.get("kind") or ""
         if search:
             searched = True
             if search_in == "contributor":
@@ -42,7 +88,12 @@ def book_search(request):
                 )
                 books = Book.objects.filter(contributors__in=contributors).distinct()
             else:
-                books = Book.objects.filter(title__icontains=search)
+                books = Book.objects.filter(
+                    Q(title__icontains=search) | Q(content__icontains=search)
+                )
+            if kind:
+                books = books.filter(kind=kind)
+            books = books.select_related("publisher")
 
     return render(
         request,

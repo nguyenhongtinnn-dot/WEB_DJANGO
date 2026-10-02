@@ -1,20 +1,6 @@
-# Bookr — website đánh giá sách (Django, chương 1–10)
+# CineNoir — website đánh giá phim (Django, chương 1–10)
 
-Project theo lộ trình tài liệu Web Django đến **chương 10**. Chưa cấu hình Git/GitHub và Render (bạn tự làm phần đó).
-
-## Nội dung đã làm
-
-| Chương | Nội dung |
-|--------|----------|
-| 1 | Project Django `bookr`, app `reviews` |
-| 2 | Model & migration: Publisher, Book, Contributor, BookContributor, Review |
-| 3 | Views, URL, template: danh sách sách, chi tiết, tìm kiếm |
-| 4 | Django Admin đăng ký model, filter, search, inline |
-| 5 | Static files (`static/css/bookr.css`) |
-| 6–7 | Form tìm kiếm, ModelForm đánh giá/NXB, validate điểm 0–5 |
-| 8 | Upload ảnh bìa và file mẫu (`MEDIA`) |
-| 9 | Session, đăng nhập/đăng xuất, `@login_required` |
-| 10 | Custom AdminSite, template logout, dashboard tìm kiếm |
+Website đổi từ Bookr (sách) sang thư viện phim với 3 mục: **Movie**, **Series**, **Audio**. Giao diện theme tối.
 
 ## Chạy local
 
@@ -31,4 +17,12 @@ Mở http://127.0.0.1:8000/
 
 - Superuser: `admin` / `admin123`
 - User thường: `reader` / `reader123`
-- Admin tùy chỉnh: http://127.0.0.1:8000/admin/
+- Admin: http://127.0.0.1:8000/admin/
+
+## Mục phim
+
+- `/` trang chủ (3 kệ phim)
+- `/movies/` phim movie
+- `/series/` phim series nhiều tập
+- `/audio/` phim audio
+- `/book-search/` tìm kiếm theo tên / ekip / loại

@@ -1,11 +1,16 @@
 {% extends "base.html" %}
-{% block title %}{% if instance %}Sửa{% else %}Viết{% endif %} đánh giá — Bookr{% endblock %}
+{% block title %}{% if instance %}Sửa{% else %}Viết{% endif %} đánh giá — CineNoir{% endblock %}
 {% block content %}
-<h1>{% if instance %}Sửa{% else %}Viết{% endif %} đánh giá cho {{ book.title }}</h1>
-<form method="post" class="stack">
+<section class="page-head">
+    <h1>{% if instance %}Sửa{% else %}Viết{% endif %} đánh giá</h1>
+    <p class="muted">{{ book.title }} · {{ book.get_kind_display }}</p>
+</section>
+<form method="post" class="form-card">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="button">Lưu</button>
-    <a href="{% url 'reviews:book_detail' book.pk %}">Hủy</a>
+    <div class="form-actions">
+        <button type="submit" class="button">Lưu đánh giá</button>
+        <a class="button ghost" href="{% url 'reviews:book_detail' book.pk %}">Hủy</a>
+    </div>
 </form>
 {% endblock %}
